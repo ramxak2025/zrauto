@@ -2,11 +2,11 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Avatar from '../components/Avatar';
-import { ChevronLeft, Send, Image as ImageIcon } from 'lucide-react';
+import { ChevronLeft, Send, Image as ImageIcon, Smile } from 'lucide-react';
 
 export default function Chat() {
   const navigate = useNavigate();
-  const { currentUser, messages, sendMessage, getUserById } = useApp();
+  const { currentUser, messages, sendMessage, getUserById, users } = useApp();
   const [text, setText] = useState('');
   const bottomRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -52,9 +52,7 @@ export default function Chat() {
   const handleTouchEnd = (e) => {
     if (touchStart === null) return;
     const diff = e.changedTouches[0].clientX - touchStart;
-    if (diff > 80) {
-      navigate(-1);
-    }
+    if (diff > 80) navigate(-1);
     setTouchStart(null);
   };
 
@@ -73,30 +71,34 @@ export default function Chat() {
     return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
   };
 
+  const onlineCount = users.filter(u => u.status !== 'offline' && u.id !== currentUser.id).length;
   let lastDate = '';
 
   return (
     <div
-      className="fixed inset-0 bg-gray-50 z-[100] flex flex-col slide-in-right"
+      className="fixed inset-0 bg-[#0a0a0a] z-[100] flex flex-col slide-in-right"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-3 py-3 flex items-center gap-3 shrink-0">
+      <div className="glass-nav px-3 py-3 flex items-center gap-3 shrink-0 border-b border-white/5">
         <button
           onClick={() => navigate(-1)}
-          className="btn-press p-1 rounded-lg hover:bg-gray-100"
+          className="btn-press p-1.5 rounded-xl hover:bg-white/5"
         >
-          <ChevronLeft size={24} className="text-gray-700" />
+          <ChevronLeft size={24} className="text-white/70" />
         </button>
-        <div>
-          <h1 className="text-base font-semibold text-gray-900">Общий чат</h1>
-          <p className="text-xs text-gray-400">{messages.length} сообщений</p>
+        <div className="flex-1">
+          <h1 className="text-base font-semibold text-white">Общий чат</h1>
+          <p className="text-xs text-white/30">
+            {onlineCount > 0 ? `${onlineCount} онлайн` : 'Нет активных'}
+            {' · '}{messages.length} сообщений
+          </p>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
         {messages.map((msg) => {
           const sender = getUserById(msg.userId);
           const isMe = msg.userId === currentUser.id;
@@ -110,8 +112,8 @@ export default function Chat() {
           return (
             <div key={msg.id}>
               {showDate && (
-                <div className="flex justify-center my-3">
-                  <span className="bg-white text-gray-400 text-xs px-3 py-1 rounded-full shadow-sm">
+                <div className="flex justify-center my-4">
+                  <span className="glass text-white/40 text-[11px] px-3 py-1 rounded-full font-medium">
                     {msgDate}
                   </span>
                 </div>
@@ -127,26 +129,32 @@ export default function Chat() {
                   />
                 )}
                 <div
-                  className={`max-w-[75%] rounded-2xl px-3 py-2 ${
+                  className={`max-w-[75%] rounded-2xl px-3.5 py-2.5 ${
                     isMe
-                      ? 'bg-brand text-white rounded-tr-sm'
-                      : 'bg-white text-gray-900 shadow-sm rounded-tl-sm'
+                      ? 'bg-brand text-white rounded-tr-md'
+                      : 'glass rounded-tl-md'
                   }`}
                 >
                   {!isMe && (
-                    <p className={`text-xs font-semibold mb-0.5 ${sender?.isBestMaster ? 'text-gold' : 'text-brand'}`}>
-                      {sender?.name || 'Удален'}
+                    <p className={`text-xs font-semibold mb-0.5 ${
+                      sender?.isBestMaster ? 'text-gold' : 'text-brand'
+                    }`}>
+                      {sender?.isBestMaster && '★ '}{sender?.name || 'Удален'}
                     </p>
                   )}
                   {msg.image && (
                     <img
                       src={msg.image}
                       alt=""
-                      className="rounded-lg mb-1 max-w-full max-h-48 object-cover"
+                      className="rounded-xl mb-1.5 max-w-full max-h-52 object-cover"
                     />
                   )}
-                  {msg.text && <p className="text-sm leading-relaxed break-words">{msg.text}</p>}
-                  <p className={`text-[10px] mt-0.5 ${isMe ? 'text-white/60' : 'text-gray-400'} text-right`}>
+                  {msg.text && (
+                    <p className={`text-sm leading-relaxed break-words ${!isMe ? 'text-white/90' : ''}`}>
+                      {msg.text}
+                    </p>
+                  )}
+                  <p className={`text-[10px] mt-1 ${isMe ? 'text-white/50' : 'text-white/30'} text-right`}>
                     {formatTime(msg.timestamp)}
                   </p>
                 </div>
@@ -159,11 +167,11 @@ export default function Chat() {
 
       {/* Input */}
       {currentUser.bannedInChat ? (
-        <div className="bg-white border-t border-gray-200 px-4 py-3 text-center text-sm text-gray-400">
+        <div className="glass-nav px-4 py-4 text-center text-sm text-white/30 border-t border-white/5">
           Вы заблокированы в чате
         </div>
       ) : (
-        <div className="bg-white border-t border-gray-200 px-3 py-2 flex items-end gap-2 shrink-0">
+        <div className="glass-nav px-3 py-3 flex items-end gap-2 shrink-0 border-t border-white/5">
           <input
             type="file"
             accept="image/*"
@@ -173,30 +181,34 @@ export default function Chat() {
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="btn-press p-2 text-gray-400 hover:text-gray-600 shrink-0"
+            className="btn-press p-2.5 text-white/30 hover:text-white/50 shrink-0 rounded-xl hover:bg-white/5"
           >
             <ImageIcon size={22} />
           </button>
-          <div className="flex-1 bg-gray-100 rounded-2xl px-4 py-2">
+          <div className="flex-1 glass-input rounded-2xl px-4 py-2.5 border-0">
             <input
               type="text"
               placeholder="Сообщение..."
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full bg-transparent outline-none text-sm"
+              className="w-full bg-transparent outline-none text-sm text-white placeholder:text-white/25"
             />
           </div>
           <button
             onClick={handleSend}
             disabled={!text.trim()}
-            className="btn-press p-2 text-brand disabled:text-gray-300 shrink-0"
+            className={`btn-press p-2.5 shrink-0 rounded-xl transition-all ${
+              text.trim()
+                ? 'bg-brand text-white shadow-lg shadow-brand/20'
+                : 'text-white/15'
+            }`}
           >
-            <Send size={22} />
+            <Send size={20} />
           </button>
         </div>
       )}
-      <div className="h-[env(safe-area-inset-bottom)] bg-white shrink-0" />
+      <div className="h-[env(safe-area-inset-bottom)] bg-[#0a0a0a] shrink-0" />
     </div>
   );
 }

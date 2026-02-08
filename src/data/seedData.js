@@ -235,18 +235,19 @@ function generateSchedule() {
   const today = new Date();
   const masterIds = initialUsers.filter(u => u.role !== ROLES.OWNER).map(u => u.id);
 
-  for (let dayOffset = -1; dayOffset <= 7; dayOffset++) {
+  for (let dayOffset = -7; dayOffset <= 35; dayOffset++) {
     const date = new Date(today);
     date.setDate(today.getDate() + dayOffset);
     const key = date.toISOString().split('T')[0];
     schedule[key] = {};
 
     masterIds.forEach((id, idx) => {
-      if ((idx + dayOffset) % 7 === 0) {
+      const seed = Math.abs(idx + dayOffset);
+      if (seed % 7 === 0) {
         schedule[key][id] = SHIFT_TYPES.DAYOFF;
-      } else if ((idx + dayOffset) % 13 === 0) {
+      } else if (seed % 13 === 0) {
         schedule[key][id] = SHIFT_TYPES.SICK;
-      } else if ((idx + dayOffset) % 11 === 0) {
+      } else if (seed % 11 === 0) {
         schedule[key][id] = SHIFT_TYPES.LEAVE;
       } else {
         schedule[key][id] = SHIFT_TYPES.WORK;

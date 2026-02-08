@@ -16,7 +16,6 @@ import {
   Phone,
   User as UserIcon,
   Lock,
-  ChevronRight,
 } from 'lucide-react';
 
 export default function Profile() {
@@ -61,16 +60,12 @@ export default function Profile() {
   };
 
   const handleSaveName = () => {
-    if (name.trim()) {
-      updateUser(currentUser.id, { name: name.trim() });
-    }
+    if (name.trim()) updateUser(currentUser.id, { name: name.trim() });
     setEditingName(false);
   };
 
   const handleSavePhone = () => {
-    if (phone.trim()) {
-      updateUser(currentUser.id, { phone: phone.trim() });
-    }
+    if (phone.trim()) updateUser(currentUser.id, { phone: phone.trim() });
     setEditingPhone(false);
   };
 
@@ -108,17 +103,17 @@ export default function Profile() {
   return (
     <div className="fade-in px-4 pt-4 pb-4 max-w-lg mx-auto w-full">
       {/* My Profile */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-4 text-center">
-        <div className="relative inline-block mb-3">
+      <div className="glass rounded-2xl p-6 mb-4 text-center">
+        <div className="relative inline-block mb-4">
           <Avatar
             src={currentUser.avatar}
             name={currentUser.name}
-            size={80}
+            size={88}
             isBestMaster={currentUser.isBestMaster}
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="btn-press absolute bottom-0 right-0 bg-brand text-white p-1.5 rounded-full shadow-lg"
+            className="btn-press absolute bottom-0 right-0 bg-brand text-white p-2 rounded-full shadow-lg shadow-brand/30"
           >
             <Camera size={14} />
           </button>
@@ -131,14 +126,14 @@ export default function Profile() {
           />
         </div>
 
-        <div className="mb-1">
+        <div className="mb-1.5">
           {editingName ? (
             <div className="flex items-center justify-center gap-2">
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="text-center text-lg font-bold bg-gray-50 border border-gray-200 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-brand"
+                className="text-center text-lg font-bold glass-input rounded-lg px-3 py-1"
                 autoFocus
               />
               <button onClick={handleSaveName} className="btn-press text-brand">
@@ -148,10 +143,10 @@ export default function Profile() {
           ) : (
             <button
               onClick={() => setEditingName(true)}
-              className="inline-flex items-center gap-1.5 text-lg font-bold text-gray-900"
+              className="inline-flex items-center gap-1.5 text-lg font-bold text-white"
             >
               {currentUser.name}
-              <Edit3 size={14} className="text-gray-400" />
+              <Edit3 size={14} className="text-white/30" />
             </button>
           )}
         </div>
@@ -163,7 +158,7 @@ export default function Profile() {
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="text-center text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-brand"
+                className="text-center text-sm glass-input rounded-lg px-3 py-1"
                 autoFocus
               />
               <button onClick={handleSavePhone} className="btn-press text-brand">
@@ -173,15 +168,15 @@ export default function Profile() {
           ) : (
             <button
               onClick={() => setEditingPhone(true)}
-              className="inline-flex items-center gap-1.5 text-sm text-gray-500"
+              className="inline-flex items-center gap-1.5 text-sm text-white/40"
             >
               {currentUser.phone}
-              <Edit3 size={12} className="text-gray-400" />
+              <Edit3 size={12} className="text-white/20" />
             </button>
           )}
         </div>
 
-        <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 rounded-full text-xs font-medium text-white/50">
           <Shield size={12} />
           {currentUser.role === ROLES.OWNER ? 'Владелец' : currentUser.role === ROLES.ADMIN ? 'Админ' : 'Мастер'}
         </span>
@@ -190,7 +185,7 @@ export default function Profile() {
       {/* Logout */}
       <button
         onClick={logout}
-        className="btn-press w-full flex items-center justify-center gap-2 py-3 bg-white text-red-600 font-medium rounded-2xl shadow-sm border border-gray-100 hover:bg-red-50 transition-colors mb-6"
+        className="btn-press w-full flex items-center justify-center gap-2 py-3.5 glass text-red-400 font-medium rounded-2xl hover:bg-red-500/5 transition-colors mb-6"
       >
         <LogOut size={18} />
         Выйти
@@ -199,25 +194,22 @@ export default function Profile() {
       {/* Staff Management - Owner Only */}
       {isOwner && (
         <>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-bold text-gray-900">Сотрудники</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-white">Сотрудники</h2>
             <button
               onClick={() => setShowAddUser(true)}
-              className="btn-press flex items-center gap-1.5 px-3 py-2 bg-brand text-white text-sm font-medium rounded-xl hover:bg-brand-dark transition-colors"
+              className="btn-press flex items-center gap-1.5 px-4 py-2.5 bg-brand text-white text-sm font-medium rounded-xl hover:bg-brand-dark transition-colors shadow-lg shadow-brand/20"
             >
               <UserPlus size={14} />
               Добавить
             </button>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             {staff.map((user) => {
               const isEditing = editingUserId === user.id;
               return (
-                <div
-                  key={user.id}
-                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4"
-                >
+                <div key={user.id} className="glass rounded-2xl p-4">
                   <div className="flex items-center gap-3">
                     <div className="relative">
                       <Avatar
@@ -226,7 +218,7 @@ export default function Profile() {
                         size={44}
                         isBestMaster={user.isBestMaster}
                       />
-                      <label className="absolute bottom-0 right-0 bg-gray-200 text-gray-600 p-0.5 rounded-full cursor-pointer hover:bg-gray-300">
+                      <label className="absolute -bottom-0.5 -right-0.5 bg-white/10 text-white/60 p-1 rounded-full cursor-pointer hover:bg-white/20 transition-colors">
                         <Camera size={10} />
                         <input
                           type="file"
@@ -239,24 +231,24 @@ export default function Profile() {
 
                     <div className="flex-1 min-w-0">
                       {isEditing ? (
-                        <div className="space-y-1">
+                        <div className="space-y-1.5">
                           <input
                             type="text"
                             value={editUserName}
                             onChange={(e) => setEditUserName(e.target.value)}
-                            className="w-full text-sm bg-gray-50 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand"
+                            className="w-full text-sm glass-input rounded-lg px-2 py-1"
                           />
                           <input
                             type="tel"
                             value={editUserPhone}
                             onChange={(e) => setEditUserPhone(e.target.value)}
-                            className="w-full text-xs bg-gray-50 border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand"
+                            className="w-full text-xs glass-input rounded-lg px-2 py-1"
                           />
                         </div>
                       ) : (
                         <>
-                          <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
-                          <p className="text-xs text-gray-400">{user.phone}</p>
+                          <p className="text-sm font-medium text-white truncate">{user.name}</p>
+                          <p className="text-xs text-white/30">{user.phone}</p>
                         </>
                       )}
                     </div>
@@ -264,31 +256,19 @@ export default function Profile() {
                     <div className="flex items-center gap-1 shrink-0">
                       {isEditing ? (
                         <>
-                          <button
-                            onClick={handleSaveEditUser}
-                            className="btn-press p-2 text-green-600 hover:bg-green-50 rounded-lg"
-                          >
+                          <button onClick={handleSaveEditUser} className="btn-press p-2 text-green-400 hover:bg-green-500/10 rounded-lg">
                             <Save size={16} />
                           </button>
-                          <button
-                            onClick={() => setEditingUserId(null)}
-                            className="btn-press p-2 text-gray-400 hover:bg-gray-50 rounded-lg"
-                          >
+                          <button onClick={() => setEditingUserId(null)} className="btn-press p-2 text-white/30 hover:bg-white/5 rounded-lg">
                             <X size={16} />
                           </button>
                         </>
                       ) : (
                         <>
-                          <button
-                            onClick={() => handleStartEditUser(user)}
-                            className="btn-press p-2 text-gray-400 hover:bg-gray-50 rounded-lg"
-                          >
+                          <button onClick={() => handleStartEditUser(user)} className="btn-press p-2 text-white/30 hover:bg-white/5 rounded-lg">
                             <Edit3 size={16} />
                           </button>
-                          <button
-                            onClick={() => deleteUser(user.id)}
-                            className="btn-press p-2 text-red-400 hover:bg-red-50 rounded-lg"
-                          >
+                          <button onClick={() => deleteUser(user.id)} className="btn-press p-2 text-red-400/50 hover:bg-red-500/10 rounded-lg">
                             <Trash2 size={16} />
                           </button>
                         </>
@@ -296,38 +276,34 @@ export default function Profile() {
                     </div>
                   </div>
 
-                  {/* Toggles */}
-                  <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-50">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          checked={user.isBestMaster}
-                          onChange={(e) => updateUser(user.id, { isBestMaster: e.target.checked })}
-                          className="sr-only"
-                        />
-                        <div className={`w-9 h-5 rounded-full transition-colors ${user.isBestMaster ? 'bg-gold' : 'bg-gray-200'}`}>
-                          <div className={`w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform mt-0.5 ${user.isBestMaster ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
-                        </div>
+                  {/* Apple-style Toggles */}
+                  <div className="flex items-center gap-5 mt-4 pt-3 border-t border-white/5">
+                    <label className="flex items-center gap-3 cursor-pointer flex-1">
+                      <button
+                        type="button"
+                        className={`apple-toggle ${user.isBestMaster ? 'on-gold' : ''}`}
+                        onClick={() => updateUser(user.id, { isBestMaster: !user.isBestMaster })}
+                      />
+                      <div className="flex items-center gap-1.5">
+                        <Trophy size={14} className={user.isBestMaster ? 'text-gold' : 'text-white/20'} />
+                        <span className={`text-xs ${user.isBestMaster ? 'text-gold' : 'text-white/40'}`}>
+                          Лучший мастер
+                        </span>
                       </div>
-                      <Trophy size={14} className={user.isBestMaster ? 'text-gold' : 'text-gray-300'} />
-                      <span className="text-xs text-gray-500">Лучший мастер</span>
                     </label>
 
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          checked={user.bannedInChat}
-                          onChange={(e) => updateUser(user.id, { bannedInChat: e.target.checked })}
-                          className="sr-only"
-                        />
-                        <div className={`w-9 h-5 rounded-full transition-colors ${user.bannedInChat ? 'bg-red-500' : 'bg-gray-200'}`}>
-                          <div className={`w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform mt-0.5 ${user.bannedInChat ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
-                        </div>
+                    <label className="flex items-center gap-3 cursor-pointer flex-1">
+                      <button
+                        type="button"
+                        className={`apple-toggle ${user.bannedInChat ? 'on-red' : ''}`}
+                        onClick={() => updateUser(user.id, { bannedInChat: !user.bannedInChat })}
+                      />
+                      <div className="flex items-center gap-1.5">
+                        <Ban size={14} className={user.bannedInChat ? 'text-red-400' : 'text-white/20'} />
+                        <span className={`text-xs ${user.bannedInChat ? 'text-red-400' : 'text-white/40'}`}>
+                          Бан
+                        </span>
                       </div>
-                      <Ban size={14} className={user.bannedInChat ? 'text-red-500' : 'text-gray-300'} />
-                      <span className="text-xs text-gray-500">Бан в чате</span>
                     </label>
                   </div>
                 </div>
@@ -339,17 +315,17 @@ export default function Profile() {
 
       {/* Add User Modal */}
       {showAddUser && (
-        <div className="fixed inset-0 bg-black/40 z-[200] flex items-end justify-center">
-          <div className="bg-white w-full max-w-lg rounded-t-3xl slide-up max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-4 border-b border-gray-100">
-              <h2 className="text-lg font-semibold">Новый сотрудник</h2>
-              <button onClick={() => setShowAddUser(false)} className="btn-press p-1 rounded-lg hover:bg-gray-100">
+        <div className="fixed inset-0 bg-black/60 z-[200] flex items-end justify-center" onClick={() => setShowAddUser(false)}>
+          <div className="glass-heavy w-full max-w-lg rounded-t-3xl slide-up max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-white/5">
+              <h2 className="text-lg font-semibold text-white">Новый сотрудник</h2>
+              <button onClick={() => setShowAddUser(false)} className="btn-press p-1.5 rounded-xl hover:bg-white/5 text-white/50">
                 <X size={20} />
               </button>
             </div>
             <form onSubmit={handleAddUser} className="p-4 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">
+                <label className="block text-xs font-medium text-white/40 mb-1.5">
                   <UserIcon size={12} className="inline mr-1" />
                   Имя
                 </label>
@@ -357,12 +333,12 @@ export default function Profile() {
                   type="text"
                   value={newUserName}
                   onChange={(e) => setNewUserName(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                  className="w-full px-3 py-2.5 glass-input rounded-xl text-sm"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">
+                <label className="block text-xs font-medium text-white/40 mb-1.5">
                   <Phone size={12} className="inline mr-1" />
                   Телефон
                 </label>
@@ -370,12 +346,12 @@ export default function Profile() {
                   type="tel"
                   value={newUserPhone}
                   onChange={(e) => setNewUserPhone(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                  className="w-full px-3 py-2.5 glass-input rounded-xl text-sm"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">
+                <label className="block text-xs font-medium text-white/40 mb-1.5">
                   <Lock size={12} className="inline mr-1" />
                   Пароль
                 </label>
@@ -383,24 +359,24 @@ export default function Profile() {
                   type="password"
                   value={newUserPassword}
                   onChange={(e) => setNewUserPassword(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                  className="w-full px-3 py-2.5 glass-input rounded-xl text-sm"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Роль</label>
+                <label className="block text-xs font-medium text-white/40 mb-1.5">Роль</label>
                 <select
                   value={newUserRole}
                   onChange={(e) => setNewUserRole(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                  className="w-full px-3 py-2.5 glass-input rounded-xl text-sm"
                 >
-                  <option value={ROLES.MASTER}>Мастер</option>
-                  <option value={ROLES.ADMIN}>Админ</option>
+                  <option value={ROLES.MASTER} className="bg-[#1a1a1a]">Мастер</option>
+                  <option value={ROLES.ADMIN} className="bg-[#1a1a1a]">Админ</option>
                 </select>
               </div>
               <button
                 type="submit"
-                className="btn-press w-full py-3 bg-brand text-white font-semibold rounded-xl hover:bg-brand-dark transition-colors"
+                className="btn-press w-full py-3 bg-brand text-white font-semibold rounded-xl hover:bg-brand-dark transition-colors shadow-lg shadow-brand/20"
               >
                 Добавить сотрудника
               </button>

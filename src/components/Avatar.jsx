@@ -1,13 +1,19 @@
 import { Trophy } from 'lucide-react';
 
-export default function Avatar({ src, name, size = 40, isBestMaster = false, className = '' }) {
+export default function Avatar({ src, name, size = 40, isBestMaster = false, className = '', dimmed = false }) {
   return (
     <div className={`relative inline-block ${className}`} style={{ width: size, height: size }}>
       <div
         className={`rounded-full overflow-hidden ${
           isBestMaster ? 'ring-2 ring-gold' : ''
         }`}
-        style={{ width: size, height: size }}
+        style={{
+          width: size,
+          height: size,
+          opacity: dimmed ? 0.3 : 1,
+          filter: dimmed ? 'grayscale(1)' : 'none',
+          transition: 'opacity 0.4s ease, filter 0.4s ease',
+        }}
       >
         <img
           src={src}
@@ -19,7 +25,7 @@ export default function Avatar({ src, name, size = 40, isBestMaster = false, cla
         />
       </div>
       {isBestMaster && (
-        <div className="absolute -top-1 -right-1 bg-gold rounded-full p-0.5">
+        <div className="absolute -top-1 -right-1 bg-gold rounded-full p-0.5 shadow-lg shadow-gold/30">
           <Trophy size={size * 0.3} className="text-white" />
         </div>
       )}

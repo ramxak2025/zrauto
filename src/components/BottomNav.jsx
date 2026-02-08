@@ -16,20 +16,22 @@ export default function BottomNav() {
   if (location.pathname === '/chat') return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-      <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 glass-nav z-50">
+      <div className="flex justify-around items-center h-22 max-w-lg mx-auto px-2 pt-2 pb-4">
         {tabs.map(({ path, label, icon: Icon }) => {
           const isActive = location.pathname === path;
           return (
             <button
               key={path}
               onClick={() => navigate(path)}
-              className={`btn-press flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
-                isActive ? 'text-brand' : 'text-gray-400'
+              className={`btn-press flex flex-col items-center justify-center gap-1 flex-1 py-2 rounded-2xl transition-all ${
+                isActive ? 'text-brand' : 'text-white/40 hover:text-white/60'
               }`}
             >
-              <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
-              <span className={`text-[10px] ${isActive ? 'font-semibold' : 'font-medium'}`}>
+              <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-brand/15' : ''}`}>
+                <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
+              </div>
+              <span className={`text-[10px] leading-none ${isActive ? 'font-semibold' : 'font-medium'}`}>
                 {label}
               </span>
             </button>
