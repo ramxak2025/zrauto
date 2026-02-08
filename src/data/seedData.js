@@ -1,0 +1,336 @@
+export const ROLES = {
+  OWNER: 'owner',
+  ADMIN: 'admin',
+  MASTER: 'master',
+};
+
+export const STATUSES = {
+  OFFLINE: 'offline',
+  WORKING: 'working',
+  BUSY: 'busy',
+  LUNCH: 'lunch',
+  AWAY: 'away',
+};
+
+export const STATUS_LABELS = {
+  [STATUSES.OFFLINE]: 'Не на смене',
+  [STATUSES.WORKING]: 'В работе',
+  [STATUSES.BUSY]: 'Занят',
+  [STATUSES.LUNCH]: 'На обеде',
+  [STATUSES.AWAY]: 'Отошел',
+};
+
+export const STATUS_COLORS = {
+  [STATUSES.OFFLINE]: 'bg-gray-200 text-gray-600',
+  [STATUSES.WORKING]: 'bg-green-100 text-green-700',
+  [STATUSES.BUSY]: 'bg-red-100 text-red-700',
+  [STATUSES.LUNCH]: 'bg-yellow-100 text-yellow-700',
+  [STATUSES.AWAY]: 'bg-blue-100 text-blue-600',
+};
+
+export const SHIFT_TYPES = {
+  WORK: 'work',
+  DAYOFF: 'dayoff',
+  SICK: 'sick',
+  LEAVE: 'leave',
+};
+
+export const SHIFT_LABELS = {
+  [SHIFT_TYPES.WORK]: 'Рабочий день',
+  [SHIFT_TYPES.DAYOFF]: 'Выходной',
+  [SHIFT_TYPES.SICK]: 'Больничный',
+  [SHIFT_TYPES.LEAVE]: 'Отгул',
+};
+
+export const TASK_STATUSES = {
+  NEW: 'new',
+  IN_PROGRESS: 'in_progress',
+  REVIEW: 'review',
+  DONE: 'done',
+};
+
+export const TASK_STATUS_LABELS = {
+  [TASK_STATUSES.NEW]: 'Новая',
+  [TASK_STATUSES.IN_PROGRESS]: 'В работе',
+  [TASK_STATUSES.REVIEW]: 'На проверке',
+  [TASK_STATUSES.DONE]: 'Завершена',
+};
+
+const avatarUrl = (seed) =>
+  `https://i.pravatar.cc/150?img=${seed}`;
+
+export const initialUsers = [
+  {
+    id: '1',
+    name: 'Владелец',
+    phone: '+7 900 000 0001',
+    password: 'owner123',
+    role: ROLES.OWNER,
+    avatar: avatarUrl(68),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '2',
+    name: 'Малик',
+    phone: '+7 900 000 0002',
+    password: 'admin123',
+    role: ROLES.ADMIN,
+    avatar: avatarUrl(60),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '3',
+    name: 'Раджаб',
+    phone: '+7 900 000 0003',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(57),
+    isBestMaster: true,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '4',
+    name: 'Омар',
+    phone: '+7 900 000 0004',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(53),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '5',
+    name: 'Байрам',
+    phone: '+7 900 000 0005',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(51),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '6',
+    name: 'Ших',
+    phone: '+7 900 000 0006',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(52),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '7',
+    name: 'Магьди',
+    phone: '+7 900 000 0007',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(56),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '8',
+    name: 'Хизри',
+    phone: '+7 900 000 0008',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(59),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '9',
+    name: 'Хайбулла',
+    phone: '+7 900 000 0009',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(61),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '10',
+    name: 'Сайпудин',
+    phone: '+7 900 000 0010',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(62),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '11',
+    name: 'Ибрагим',
+    phone: '+7 900 000 0011',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(14),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '12',
+    name: 'Рамазан',
+    phone: '+7 900 000 0012',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(33),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '13',
+    name: 'Асрет',
+    phone: '+7 900 000 0013',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(11),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+  {
+    id: '14',
+    name: 'Умар',
+    phone: '+7 900 000 0014',
+    password: 'master123',
+    role: ROLES.MASTER,
+    avatar: avatarUrl(12),
+    isBestMaster: false,
+    status: STATUSES.OFFLINE,
+    shiftStart: null,
+    bannedInChat: false,
+  },
+];
+
+function generateSchedule() {
+  const schedule = {};
+  const today = new Date();
+  const masterIds = initialUsers.filter(u => u.role !== ROLES.OWNER).map(u => u.id);
+
+  for (let dayOffset = -1; dayOffset <= 7; dayOffset++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + dayOffset);
+    const key = date.toISOString().split('T')[0];
+    schedule[key] = {};
+
+    masterIds.forEach((id, idx) => {
+      if ((idx + dayOffset) % 7 === 0) {
+        schedule[key][id] = SHIFT_TYPES.DAYOFF;
+      } else if ((idx + dayOffset) % 13 === 0) {
+        schedule[key][id] = SHIFT_TYPES.SICK;
+      } else if ((idx + dayOffset) % 11 === 0) {
+        schedule[key][id] = SHIFT_TYPES.LEAVE;
+      } else {
+        schedule[key][id] = SHIFT_TYPES.WORK;
+      }
+    });
+  }
+  return schedule;
+}
+
+export const initialSchedule = generateSchedule();
+
+export const initialMessages = [
+  {
+    id: '1',
+    userId: '3',
+    text: 'Доброе утро, всем! Готов к работе',
+    timestamp: Date.now() - 3600000 * 3,
+    image: null,
+  },
+  {
+    id: '2',
+    userId: '2',
+    text: 'Привет! Сегодня важный день, у нас много записей',
+    timestamp: Date.now() - 3600000 * 2.5,
+    image: null,
+  },
+  {
+    id: '3',
+    userId: '4',
+    text: 'Понял, буду стараться!',
+    timestamp: Date.now() - 3600000 * 2,
+    image: null,
+  },
+  {
+    id: '4',
+    userId: '5',
+    text: 'Кто может подменить меня в пятницу?',
+    timestamp: Date.now() - 3600000,
+    image: null,
+  },
+  {
+    id: '5',
+    userId: '3',
+    text: 'Я могу, если нужно',
+    timestamp: Date.now() - 1800000,
+    image: null,
+  },
+];
+
+export const initialTasks = [
+  {
+    id: '1',
+    title: 'Убрать рабочее место',
+    description: 'Провести генеральную уборку рабочей зоны. Протереть все поверхности, разложить инструменты.',
+    deadline: new Date(Date.now() + 86400000).toISOString(),
+    assigneeId: '3',
+    creatorId: '2',
+    status: TASK_STATUSES.IN_PROGRESS,
+  },
+  {
+    id: '2',
+    title: 'Инвентаризация материалов',
+    description: 'Пересчитать все расходные материалы и составить список необходимых закупок.',
+    deadline: new Date(Date.now() + 172800000).toISOString(),
+    assigneeId: '4',
+    creatorId: '2',
+    status: TASK_STATUSES.NEW,
+  },
+  {
+    id: '3',
+    title: 'Обновить прайс-лист',
+    description: 'Актуализировать цены в прайс-листе с учётом новых поставок.',
+    deadline: new Date(Date.now() + 86400000 * 3).toISOString(),
+    assigneeId: '5',
+    creatorId: '1',
+    status: TASK_STATUSES.REVIEW,
+  },
+  {
+    id: '4',
+    title: 'Подготовить отчёт за неделю',
+    description: 'Собрать данные о выполненных работах за прошедшую неделю и оформить отчёт.',
+    deadline: new Date(Date.now() - 86400000).toISOString(),
+    assigneeId: '3',
+    creatorId: '1',
+    status: TASK_STATUSES.DONE,
+  },
+];
