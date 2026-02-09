@@ -11,7 +11,6 @@ import {
   Trash2,
   Edit3,
   X,
-  Ban,
   Shield,
   Phone,
   User as UserIcon,
@@ -292,19 +291,6 @@ export default function Profile() {
                       </div>
                     </label>
 
-                    <label className="flex items-center gap-3 cursor-pointer flex-1">
-                      <button
-                        type="button"
-                        className={`apple-toggle ${user.bannedInChat ? 'on-red' : ''}`}
-                        onClick={() => updateUser(user.id, { bannedInChat: !user.bannedInChat })}
-                      />
-                      <div className="flex items-center gap-1.5">
-                        <Ban size={14} className={user.bannedInChat ? 'text-red-400' : 'text-white/20'} />
-                        <span className={`text-xs ${user.bannedInChat ? 'text-red-400' : 'text-white/40'}`}>
-                          Бан
-                        </span>
-                      </div>
-                    </label>
                   </div>
                 </div>
               );

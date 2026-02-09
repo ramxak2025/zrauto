@@ -56,6 +56,11 @@ export const TASK_STATUS_LABELS = {
   [TASK_STATUSES.DONE]: 'Завершена',
 };
 
+export const FINANCE_TYPES = {
+  INCOME: 'income',
+  EXPENSE: 'expense',
+};
+
 const avatarUrl = (seed) =>
   `https://i.pravatar.cc/150?img=${seed}`;
 
@@ -70,7 +75,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '2',
@@ -82,7 +86,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '3',
@@ -94,7 +97,6 @@ export const initialUsers = [
     isBestMaster: true,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '4',
@@ -106,7 +108,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '5',
@@ -118,7 +119,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '6',
@@ -130,7 +130,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '7',
@@ -142,7 +141,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '8',
@@ -154,7 +152,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '9',
@@ -166,7 +163,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '10',
@@ -178,7 +174,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '11',
@@ -190,7 +185,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '12',
@@ -202,7 +196,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '13',
@@ -214,7 +207,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
   {
     id: '14',
@@ -226,7 +218,6 @@ export const initialUsers = [
     isBestMaster: false,
     status: STATUSES.OFFLINE,
     shiftStart: null,
-    bannedInChat: false,
   },
 ];
 
@@ -259,43 +250,80 @@ function generateSchedule() {
 
 export const initialSchedule = generateSchedule();
 
-export const initialMessages = [
-  {
-    id: '1',
-    userId: '3',
-    text: 'Доброе утро, всем! Готов к работе',
-    timestamp: Date.now() - 3600000 * 3,
-    image: null,
-  },
-  {
-    id: '2',
-    userId: '2',
-    text: 'Привет! Сегодня важный день, у нас много записей',
-    timestamp: Date.now() - 3600000 * 2.5,
-    image: null,
-  },
-  {
-    id: '3',
-    userId: '4',
-    text: 'Понял, буду стараться!',
-    timestamp: Date.now() - 3600000 * 2,
-    image: null,
-  },
-  {
-    id: '4',
-    userId: '5',
-    text: 'Кто может подменить меня в пятницу?',
-    timestamp: Date.now() - 3600000,
-    image: null,
-  },
-  {
-    id: '5',
-    userId: '3',
-    text: 'Я могу, если нужно',
-    timestamp: Date.now() - 1800000,
-    image: null,
-  },
-];
+// Finance seed data: transactions per user
+function generateFinanceData() {
+  const transactions = [];
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+  const staffIds = initialUsers.filter(u => u.role !== ROLES.OWNER).map(u => u.id);
+
+  const incomeDescs = ['Стрижка', 'Укладка', 'Окрашивание', 'Бритьё', 'Моделирование бороды', 'Детская стрижка', 'Комплекс VIP'];
+  const expenseDescs = ['Расходные материалы', 'Обед', 'Инструменты', 'Средства для волос', 'Перчатки'];
+
+  let idCounter = 1;
+
+  // Previous month data
+  staffIds.forEach((userId) => {
+    const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+    const daysInPrev = new Date(prevYear, prevMonth + 1, 0).getDate();
+
+    for (let d = 1; d <= daysInPrev; d += 2) {
+      const date = new Date(prevYear, prevMonth, d);
+      transactions.push({
+        id: String(idCounter++),
+        userId,
+        type: FINANCE_TYPES.INCOME,
+        amount: Math.floor(800 + Math.random() * 4200),
+        description: incomeDescs[Math.floor(Math.random() * incomeDescs.length)],
+        date: date.toISOString(),
+      });
+      if (d % 6 === 0) {
+        transactions.push({
+          id: String(idCounter++),
+          userId,
+          type: FINANCE_TYPES.EXPENSE,
+          amount: Math.floor(200 + Math.random() * 1500),
+          description: expenseDescs[Math.floor(Math.random() * expenseDescs.length)],
+          date: date.toISOString(),
+        });
+      }
+    }
+  });
+
+  // Current month data
+  staffIds.forEach((userId) => {
+    for (let d = 1; d <= now.getDate(); d += 1) {
+      if (Math.random() > 0.4) {
+        const date = new Date(currentYear, currentMonth, d, 10 + Math.floor(Math.random() * 8));
+        transactions.push({
+          id: String(idCounter++),
+          userId,
+          type: FINANCE_TYPES.INCOME,
+          amount: Math.floor(800 + Math.random() * 4200),
+          description: incomeDescs[Math.floor(Math.random() * incomeDescs.length)],
+          date: date.toISOString(),
+        });
+      }
+      if (Math.random() > 0.8) {
+        const date = new Date(currentYear, currentMonth, d, 12 + Math.floor(Math.random() * 4));
+        transactions.push({
+          id: String(idCounter++),
+          userId,
+          type: FINANCE_TYPES.EXPENSE,
+          amount: Math.floor(200 + Math.random() * 1500),
+          description: expenseDescs[Math.floor(Math.random() * expenseDescs.length)],
+          date: date.toISOString(),
+        });
+      }
+    }
+  });
+
+  return transactions;
+}
+
+export const initialFinance = generateFinanceData();
 
 export const initialTasks = [
   {

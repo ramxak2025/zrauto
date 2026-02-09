@@ -2,12 +2,12 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 import {
   initialUsers,
   initialSchedule,
-  initialMessages,
+  initialFinance,
   initialTasks,
   STATUSES,
   TASK_STATUSES,
   ROLES,
-  SHIFT_TYPES,
+  FINANCE_TYPES,
 } from '../data/seedData';
 
 const AppContext = createContext(null);
@@ -25,13 +25,13 @@ export function AppProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(() => loadState('zr_currentUser', null));
   const [users, setUsers] = useState(() => loadState('zr_users', initialUsers));
   const [schedule, setSchedule] = useState(() => loadState('zr_schedule', initialSchedule));
-  const [messages, setMessages] = useState(() => loadState('zr_messages', initialMessages));
+  const [finance, setFinance] = useState(() => loadState('zr_finance', initialFinance));
   const [tasks, setTasks] = useState(() => loadState('zr_tasks', initialTasks));
 
   useEffect(() => { localStorage.setItem('zr_currentUser', JSON.stringify(currentUser)); }, [currentUser]);
   useEffect(() => { localStorage.setItem('zr_users', JSON.stringify(users)); }, [users]);
   useEffect(() => { localStorage.setItem('zr_schedule', JSON.stringify(schedule)); }, [schedule]);
-  useEffect(() => { localStorage.setItem('zr_messages', JSON.stringify(messages)); }, [messages]);
+  useEffect(() => { localStorage.setItem('zr_finance', JSON.stringify(finance)); }, [finance]);
   useEffect(() => { localStorage.setItem('zr_tasks', JSON.stringify(tasks)); }, [tasks]);
 
   const login = useCallback((phone, password) => {
@@ -96,7 +96,6 @@ export function AppProvider({ children }) {
       status: STATUSES.OFFLINE,
       shiftStart: null,
       isBestMaster: false,
-      bannedInChat: false,
       avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
       ...userData,
     };
@@ -115,17 +114,41 @@ export function AppProvider({ children }) {
     }));
   }, []);
 
-  const sendMessage = useCallback((text, image = null) => {
-    if (!currentUser) return;
-    const msg = {
-      id: String(Date.now()),
-      userId: currentUser.id,
-      text,
-      timestamp: Date.now(),
-      image,
+  // Finance operations
+  const addTransaction = useCallback((userId, type, amount, description) => {
+    const tx = {
+      id: String(Date.now()) + String(Math.random()).slice(2, 6),
+      userId,
+      type,
+      amount: Math.abs(amount),
+      description: description || (type === FINANCE_TYPES.INCOME ? 'Доход' : 'Расход'),
+      date: new Date().toISOString(),
     };
-    setMessages((prev) => [...prev, msg]);
-  }, [currentUser]);
+    setFinance((prev) => [...prev, tx]);
+    return tx;
+  }, []);
+
+  const deleteTransaction = useCallback((txId) => {
+    setFinance((prev) => prev.filter((t) => t.id !== txId));
+  }, []);
+
+  const getFinanceForUser = useCallback((userId, year, month) => {
+    return finance.filter((t) => {
+      if (t.userId !== userId) return false;
+      const d = new Date(t.date);
+      return d.getFullYear() === year && d.getMonth() === month;
+    });
+  }, [finance]);
+
+  const getFinanceMonths = useCallback((userId) => {
+    const months = new Set();
+    finance.forEach((t) => {
+      if (t.userId !== userId) return;
+      const d = new Date(t.date);
+      months.add(`${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`);
+    });
+    return Array.from(months).sort().reverse();
+  }, [finance]);
 
   const createTask = useCallback((taskData) => {
     const task = {
@@ -157,7 +180,7 @@ export function AppProvider({ children }) {
     currentUser,
     users,
     schedule,
-    messages,
+    finance,
     tasks,
     login,
     logout,
@@ -166,7 +189,10 @@ export function AppProvider({ children }) {
     addUser,
     deleteUser,
     updateScheduleCell,
-    sendMessage,
+    addTransaction,
+    deleteTransaction,
+    getFinanceForUser,
+    getFinanceMonths,
     createTask,
     updateTaskStatus,
     isOwner,

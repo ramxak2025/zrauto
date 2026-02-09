@@ -3,7 +3,7 @@ import { useApp } from './context/AppContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Schedule from './pages/Schedule';
-import Chat from './pages/Chat';
+import Finance from './pages/Finance';
 import Tasks from './pages/Tasks';
 import Profile from './pages/Profile';
 import BottomNav from './components/BottomNav';
@@ -25,7 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/schedule" element={<Schedule />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/finance" element={<Finance />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<Navigate to="/" replace />} />

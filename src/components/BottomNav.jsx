@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, CalendarDays, MessageCircle, ClipboardList, User } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, Wallet, ClipboardList, User } from 'lucide-react';
 
 const tabs = [
   { path: '/', label: 'Главная', icon: LayoutDashboard },
   { path: '/schedule', label: 'График', icon: CalendarDays },
-  { path: '/chat', label: 'Чат', icon: MessageCircle },
+  { path: '/finance', label: 'Финансы', icon: Wallet },
   { path: '/tasks', label: 'Задачи', icon: ClipboardList },
   { path: '/profile', label: 'Профиль', icon: User },
 ];
@@ -12,8 +12,6 @@ const tabs = [
 export default function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
-
-  if (location.pathname === '/chat') return null;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 glass-nav z-50">
